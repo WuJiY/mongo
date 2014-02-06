@@ -7,6 +7,8 @@ example:
 require __DIR__.'/mongo.php';
 
 $conn = mongo_init('mongodb://localhost', 'mydb');
+// $conn = mongo_init('mydb'); // this connects to localhost
+
 
 mongo_index($conn, 'projects', 'name');
 mongo_index($conn, 'projects', [
