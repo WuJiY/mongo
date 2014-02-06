@@ -6,44 +6,50 @@ example:
 <?php
 require __DIR__.'/mongo.php';
 
-mongo('mongodb://localhost', 'mydb');
+$conn = mongo_init('mongodb://localhost', 'mydb');
 
-mongo_index('projects', 'name');
-mongo_index('projects', [
+mongo_index($conn, 'projects', 'name');
+mongo_index($conn, 'projects', [
   'author' => 1,
   'license' => 1
 ]);
 
-$doc = mongo_create('projects', [
+$doc = mongo_create($conn, 'projects', [
   'name' => 'noodlehaus/mongo',
   'author' => 'noodlehaus',
   'url' => 'http://github.com/noodlehaus/mongo.git'
 ]);
 
-$doc = mongo_find_one('projects', ['author' => $doc['author']]);
+$doc = mongo_find_one($conn, 'projects', ['author' => $doc['author']]);
 
 mongo_update(
+  $conn,
   'projects',
   ['_id' => $doc['_id']],
   ['$set' => ['license' => 'MIT']]
 );
 
-mongo_remove('projects', ['name' => 'noodlehaus/mongo']);
+mongo_remove($conn, 'projects', ['name' => 'noodlehaus/mongo']);
+
+mongo_close($conn);
 ?>
 ```
 
 function list:
 
 ```php
-function mongo($dsn = null, $db = null);
-function mongo_create($type, $obj, $opt = []);
-function mongo_find_one($type, $query);
-function mongo_find($type, $query, $limit = 0, $skip = 0);
-function mongo_distinct($type, $field, $query);
-function mongo_update($type, $query, $instr, $opt = []);
-function mongo_remove($type, $query);
-function mongo_index($type, $keys, $opt = []);
+<?php
+function mongo_init($db_or_dsn, $db = null);
+function mongo_close($conn);
+function mongo_create($conn, $type, $obj, $opt = []);
+function mongo_find_one($conn, $type, $query);
+function mongo_find($conn, $type, $query, $limit = 0, $skip = 0);
+function mongo_distinct($conn, $type, $field, $query);
+function mongo_update($conn, $type, $query, $instr, $opt = []);
+function mongo_remove($conn, $type, $query);
+function mongo_index($conn, $type, $keys, $opt = []);
 function mongo_id($id);
+?>
 ```
 
 `mongo()` uses the MIT license <http://noodlehaus.mit-license.org>
