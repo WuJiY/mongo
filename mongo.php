@@ -31,7 +31,7 @@ function mongo_init() {
   else
     $client = new MongoClient('mongodb://localhost:27017/');
 
-  return [$client, $client->selectDB($dbn)];
+  return array($client, $client->selectDB($dbn));
 }
 
 /**
@@ -56,7 +56,7 @@ function mongo_close($conn) {
  *
  * @return array object created
  */
-function mongo_create($conn, $type, $obj, $opt = []) {
+function mongo_create($conn, $type, $obj, $opt = array()) {
 
   $col = $conn[1]->selectCollection($type);
 
@@ -136,7 +136,7 @@ function mongo_distinct($conn, $type, $field, $query) {
  *
  * @return void
  */
-function mongo_update($conn, $type, $query, $instr, $opt = []) {
+function mongo_update($conn, $type, $query, $instr, $opt = array()) {
 
   $opt['multiple'] = isset($opt['multiple']) ? $opt['multiple'] : true;
   $instr['$set']['updated_at'] = new MongoDate();
@@ -171,7 +171,7 @@ function mongo_remove($conn, $type, $query) {
  *
  * @return void
  */
-function mongo_index($conn, $type, $keys, $opt = []) {
+function mongo_index($conn, $type, $keys, $opt = array()) {
   return $conn[1]
     ->selectCollection($type)
     ->ensureIndex($keys, $opt);
