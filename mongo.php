@@ -188,4 +188,3 @@ function mongo_index($conn, $type, $keys, $opt = array()) {
 function mongo_id($id) {
   return new MongoId($id);
 }
-?>
